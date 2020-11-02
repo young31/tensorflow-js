@@ -103,17 +103,17 @@ async function Train(epochs) {
     .shuffle(100); // buffer size and seed
 
   model = await buildModel()
-  // Fit the model
+    // Fit the model
   const history = await
-    model.fitDataset(flattenedDataset, {
-      epochs: epochs,
-      callbacks: {
-          onEpochEnd: async (epoch, logs) => {
-              console.log(`iter: ${epoch}, loss:${logs.loss}`)
-              writer(`iter: ${epoch}, loss:${logs.loss}`)
-          }
-        }
-      });
+  model.fitDataset(flattenedDataset, {
+    epochs: epochs,
+    callbacks: {
+      onEpochEnd: async(epoch, logs) => {
+        console.log(`iter: ${epoch}, loss:${logs.loss}`)
+        writer(`iter: ${epoch}, loss:${logs.loss}`)
+      }
+    }
+  });
 
   console.log('finish train')
   plotFitted(0, 30000, 500)
@@ -123,16 +123,16 @@ async function Train(epochs) {
 function plotFitted(min, max, steps) {
   tfvis.visor().open();
   const fittedLinePoints = [];
-  const predictors = Array.from(
-    {length: (max-min) / steps + 1},
-    (_, i) => min + (i*steps)
+  const predictors = Array.from({ length: (max - min) / steps + 1 },
+    (_, i) => min + (i * steps)
   )
 
   const preds = model.predict(tf.tensor1d(predictors)).dataSync()
 
   predictors.forEach((value, i) => {
     fittedLinePoints.push({
-      x: value, y: preds[i]
+      x: value,
+      y: preds[i]
     })
   })
 
@@ -171,4 +171,4 @@ init()
 //         })
 //     }
 // }
-// tf.serialization.registerClass(Mish); 
+// tf.serialization.registerClass(Mish);

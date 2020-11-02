@@ -1,28 +1,32 @@
 <html>
-    <head>
-        <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    </head>
 
-    <body>
-        <div> <!--link to script1-->
-            <h4>Give k</h4>
-            <input type="range" id='k-range' min='1' max='4' value='1'>
-            <p>k: <span id='k-value'></span></p>
-        </div>
+<head>
+  <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
 
-        <div id='button'></div>
+<body>
+  <div>
+    <!--link to script1-->
+    <h4>Give k</h4>
+    <input type="range" id='k-range' min='1' max='4' value='1'>
+    <p>k: <span id='k-value'></span></p>
+  </div>
 
-        <div id='plot'></div>
+  <div id='button'></div>
 
-        <script> // script 1
-            var slider = document.getElementById('k-range')
-            var output = document.getElementById('k-value')
-            output.innerHTML = slider.value
-            slider.oninput = function() {
-                output.innerHTML = this.value
-            }
-        </script>
-        <script src='../js/2-1.clustering.js'></script>
-    </body>
+  <div id='plot'></div>
+
+  <script>
+    // script 1
+    var slider = document.getElementById('k-range')
+    var output = document.getElementById('k-value')
+    output.innerHTML = slider.value
+    slider.oninput = function() {
+      output.innerHTML = this.value
+    }
+  </script>
+  <script src='../js/2-1.clustering.js'></script>
+</body>
+
 </html>
