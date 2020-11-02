@@ -3,8 +3,6 @@ let dataset
 let model
 
 function loadData() {
-    // Our target variable (what we want to predict) is the column 'label' (wow, very original),
-    // so we specify it in the configuration object as the label
     dataset = tf.data.csv(
       csvUrl, {
         columnConfigs: {
