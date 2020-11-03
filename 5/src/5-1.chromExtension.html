@@ -1,0 +1,35 @@
+<html>
+<head>
+    <!-- css little bit -->
+  <style>
+    table,
+    td,
+    th {
+      border: 1px solid black;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+  </style>
+  <!-- import -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity"></script>
+</head>
+
+<body>
+  <h2>Toxicity Detection with TensorFlow.js</h2>
+  <h3>Selected Text</h3>
+  <p style="font-style: italic;" id="input"></p>
+  <h3>Predictions</h3>
+  <table id="predictions-table">
+    <tr>
+      <th>Category</th>
+      <th>Label</th>
+    </tr>
+  </table>
+
+</body>
+<script src='5-1.chromExtension.js'></script>
+
+</html>

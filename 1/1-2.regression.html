@@ -1,0 +1,22 @@
+<html>
+
+<head>
+  <!-- import tensorflow.js(tfjs) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.4.3/dist/tfjs-vis.umd.min.js"></script>
+</head>
+
+<body>
+  <div id='visualize'></div>
+  <div id='options'>
+    <h1>Let's start regression model</h1>
+    <input type="number" id="epochs" name='epochs' value=20>
+    <label for="epochs"># of epochs</label>
+    <!-- TODO: data uploader -->
+  </div>
+  <div id='train'></div>
+  <div id='predict'></div>
+  <script src="./1-2.regression.js"></script>
+</body>
+
+</html>

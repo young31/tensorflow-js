@@ -1,0 +1,32 @@
+<html>
+
+<head>
+  <!-- import tensorflow.js(tfjs) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+  <!-- tools to load and execute edged models from google cloud atuoml -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-automl"></script>
+</head>
+
+<body>
+  <div class="main-centered-container">
+    <h2>detect</h2>
+    <div id="menu" class="flex-ui">
+      <form>
+        <h4>Score threshold:</h4>
+        <input type="range" id="score-range" min="0" max="1" value="0.5" step="0.01">
+        <p><span id="score-value"></span></p>
+        <h4>IoU threshold:</h4>
+        <input type="range" id="iou-range" min="0" max="1" value="0.5" step="0.05">
+        <p><span id="iou-value"></span></p>
+        <h4>Top k:</h4>
+        <input type="range" id="topk-range" min="1" max="20" value="1">
+        <p><span id="topk-value"></span></p>
+      </form>
+    </div>
+    <video id="video" playsinline style="display: none"></video>
+    <canvas id="output"></canvas>
+  </div>
+  <script src="./6-1.objDetection.js"></script>
+</body>
+
+</html>
