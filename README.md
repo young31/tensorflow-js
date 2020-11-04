@@ -48,3 +48,28 @@
 - weight를 bin형식으로 저장해서 받아올 수 있다.
 - 관련 기술: js에서 캠을 이용해서 동영상, google auto-ml로 훈련한 모델 불러오기  
 ~~곧 원하는 내용이 나올 것 같으니 조금만 힘내자~~
+
+## 7. Load custom model
+- 결과적으로 실행시키기에 실패하였다.
+    - 도저히 tfjs-node를 실행시킬 수 없었다.
+    - tfjs는 실행시킬 수 있으나 지원 함수 등이 다른 듯 싶다.
+- 실패했지만 몇 가지 사실을 적어보자.
+    - python 2.7 이 필요하다.(4월 버전이 최신버전이라는 것도 놀랍다.)
+    - 모델은 https protocol으로만 접근하여 불러올 수 있다.(서버가 필요하다.)
+- 파이썬에서 만든 모델을 import /export하는 코드는 간단하여 추가 작성해본다.
+
+```js
+// python
+pip install tensorflowjs
+
+import tensorflowjs as tfjs
+
+tfjs.converters.save_keras_model(<model>, <path>)
+// 이렇게 하면 모델.json과 weight파일이 나온다.
+// weight파일 정보명은 json파일 하단부에서 찾아볼 수 있다.
+
+// js
+const model = tf.loadLayersModel('<path>/model.json')
+// 이렇게 하면 weight도 한 번에 불러오는 듯 하다.
+```
+
