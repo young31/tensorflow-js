@@ -4,7 +4,7 @@ const multer = require('multer');
 
 function imageBufferToTensor(imageBuffer) {
   return tf.tidy(() => {
-    const tfimage = tf.decodeImage(imageBuffer);
+    const tfimage = tf.node.decodeImage(imageBuffer);
     return tfimage.resizeBilinear([224, 224])
       .expandDims()
       .toFloat()
@@ -14,6 +14,9 @@ function imageBufferToTensor(imageBuffer) {
 }
 
 async function runServer() {
+  // use tf.io.fileSysyem instead of directly approaching 'file:'
+  const modelURL = tf.io.fileSystem("./model/model.json");
+  const model = await tf.loadLayersModel(modelURL);
   // const model = await tf.loadLayersModel('file://model/model.json');
 
   // Building a new model using a truncated version of MobileNet
@@ -42,4 +45,4 @@ async function runServer() {
 }
 
 
-runServer();
+runServer();.

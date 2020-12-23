@@ -1,44 +1,48 @@
-const tf = require('@tensorflow/tfjs')
-const fs = require('fs')
+const tf = require('@tensorflow/tfjs-node');
+// or const tf = require('@tensorflow/tfjs-node');
+const fs = require('fs');
 
-const nClasses = 2
-let trainX, trainY
+const NUM_CLASSES = 2;
+let xTrain;
+let yTrain;
 
 function readImage(path) {
   return tf.tidy(() => {
-    const imageBuffer = fs.readFileSync(path)
-    console.log(imageBuffer)
-    const tfImage = tf.decodeImage(imageBuffer)
-    return tfImage.resizeBilinear([224, 224])
+    const imageBuffer = fs.readFileSync(path);
+    const tfimage = tf.node.decodeImage(imageBuffer);
+    return tfimage.resizeBilinear([224, 224]) // [244, 244] is the size of MobileNet's training dataset.
       .expandDims()
       .toFloat()
       .div(127.0)
-      .sub(1)
-  })
+      .sub(1); // This method and .div() bound the values between [-1, 1].
+  });
 }
+
 
 async function getImages(dir, label) {
-  let img, y
+  let img;
+  let y;
 
   fs.readdir(dir, (_, files) => {
-    console.log(_)
     files.forEach(async(file) => {
-      img = readImage(`${dir}/${file}`)
-      y = tf.tidy(() => tf.oneHot(tf.tensor1d([label]).toInt(), nClasses))
+      img = readImage(`${dir}/${file}`);
+      y = tf.tidy(() => tf.oneHot(tf.tensor1d([label]).toInt(), NUM_CLASSES));
 
-      if (trainX == null) {
-        trainX = img
-        trainY = y
+      // Add the image and one-hot labels to xTrain and yTrain
+      // If xTrain is null, simply set the value.
+      if (xTrain == null) {
+        xTrain = img;
+        yTrain = y;
       } else {
-        trainX = trainX.concat(img, 0)
-        trainY = trainY.concat(y, 0)
+        xTrain = xTrain.concat(img, 0);
+        yTrain = yTrain.concat(y, 0);
       }
-    })
-  })
-  tf.dispose(img)
-  tf.dispose(y)
-}
+    });
+  });
 
+  tf.dispose(img);
+  tf.dispose(y);
+}
 
 async function train() {
   const mobilenet = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json');
@@ -53,7 +57,7 @@ async function train() {
 
   // Create a dataset with the activations (or embeddings)
   // produced by the base model.
-  const activation = truncatedModel.predict(trainX);
+  const activation = truncatedModel.predict(xTrain);
 
   const model = tf.sequential();
 
@@ -66,7 +70,7 @@ async function train() {
   }));
 
   model.add(tf.layers.dense({
-    units: nClasses,
+    units: NUM_CLASSES,
     activation: 'softmax',
   }));
 
@@ -80,15 +84,18 @@ async function train() {
   await model.fit(activation, yTrain, {
     batchSize: 32,
     epochs: 15,
-    callbacks: tf.node.tensorBoard('/tmp/fit_logs'), // Write the logs in the given path.
+    // callbacks: tf.node.tensorBoard('/tmp/fit_logs'), // Write the logs in the given path.
   });
 
-  await model.save('file://model/');
+  // use tf.io.fileSysyem instead of directly approaching 'file:'
+  const modelURL = tf.io.fileSystem("./model/");
+  await model.save(modelURL);
+  // await model.save('file://model/');
 }
 
 async function init() {
-  await getImages('data/pikachu/', 0);
-  await getImages('data/bottle/', 1);
+  await getImages('./data/', 0);
+  // await getImages('data/bottle/', 1);
   train();
 }
 init();
